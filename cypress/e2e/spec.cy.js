@@ -39,15 +39,18 @@ describe('Burrito builder', () => {
   // When a user fills out the form, the information is reflected in the input field's value
 
   it('should show the user input when data is added to the form', () => {
-    cy.get('input[name="name"]').type('Me')
+    cy.get('input[name="name"]').type('Me').should('have.value', 'Me')
     cy.get('[value="beans"]').click()
-    cy.get('[value="sofritas"]').click()
-    cy.get('[value="sour cream"]').click()
+    cy.get('.order-summary').contains('Order: beans')
+    cy.get('[value="steak"]').click()
+    cy.get('.order-summary').contains('Order: beans, steak')
+    cy.get('[value="carnitas"]').click()
+    cy.get('.order-summary').contains('Order: beans, steak, carnitas')
   } )
 
   // This test wasn't explicity in the README instructions, but I'm guessing ya'll probably wanna see it.
 
-  it.only('should add a new order card when Submit Order is clicked', () => {
+  it('should add a new order card when Submit Order is clicked', () => {
     cy.intercept('http://localhost:3001/api/v1/orders', {
       method: 'POST',
       fixture: '../fixtures/post.json',
